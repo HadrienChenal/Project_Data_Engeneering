@@ -1,5 +1,5 @@
 import requests
-from bs4 import BeautifulSoup
+
 # --- 1. Récupérer les données de l'API Steam ---
 url = "https://store.steampowered.com/api/featuredcategories/"
 
@@ -10,9 +10,9 @@ except Exception as e:
     print("Erreur lors de la récupération des données :", e)
     exit()
 
-# --- 2. Vérifier que 'top_sellers' existe et contient des items ---
-if "top_sellers" in data and "items" in data["top_sellers"] and data["top_sellers"]["items"]:
-    first_game = data["top_sellers"]["items"][0]
+# --- 2. Vérifier que la section 'Populaires et recommandés' existe ---
+if "featured_win" in data and "items" in data["featured_win"] and data["featured_win"]["items"]:
+    first_game = data["featured_win"]["items"][0]
 
     # Nom du jeu
     name = first_game.get("name", "Nom inconnu")
@@ -28,10 +28,10 @@ if "top_sellers" in data and "items" in data["top_sellers"] and data["top_seller
     url_game = first_game.get("url", "URL non disponible")
 
     # --- 3. Affichage ---
-    print("Premier jeu affiché :")
+    print("Premier jeu ‘Populaires et recommandés’ :")
     print("Nom :", name)
     print("Prix :", price)
     print("URL :", url_game)
 
 else:
-    print("Aucun jeu trouvé dans 'top_sellers'.")
+    print("Aucun jeu trouvé dans 'Populaires et recommandés'.")
