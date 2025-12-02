@@ -1,37 +1,58 @@
+import scrapy
 import requests
 from bs4 import BeautifulSoup
-# --- 1. Récupérer les données de l'API Steam ---
-url = "https://store.steampowered.com/api/featuredcategories/"
 
-try:
-    response = requests.get(url)
-    data = response.json()
-except Exception as e:
-    print("Erreur lors de la récupération des données :", e)
-    exit()
+class SteamGamesSpider(scrapy.Spider):
+    name = "steam_games"
+    allowed_domains = ["store.steampowered.com"]
+    
+    # URL de base (ici page de recherche pour tous les jeux populaires)
+    start_urls = [
+        "https://store.steampowered.com/search/?filter=topsellers"
+    ]
 
-# --- 2. Vérifier que 'top_sellers' existe et contient des items ---
-if "top_sellers" in data and "items" in data["top_sellers"] and data["top_sellers"]["items"]:
-    first_game = data["top_sellers"]["items"][0]
+    def parse(self, response):
+        """
+        Scraping des jeux sur la page de recherche Steam.
+        """
+        # On récupère le HTML
+        html = response.text
 
-    # Nom du jeu
-    name = first_game.get("name", "Nom inconnu")
+        # On parse avec BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
 
-    # Prix du jeu
-    price_raw = first_game.get("final_price")
-    if price_raw is None:
-        price = "Gratuit ou non disponible"
-    else:
-        price = f"{price_raw / 100:.2f} €"
+        # Chaque jeu est dans <a class="search_result_row">
+        results = soup.find_all("a", class_="search_result_row")
 
-    # URL du jeu
-    url_game = first_game.get("url", "URL non disponible")
+        for r in results:
+            # Nom
+            title_tag = r.find("span", class_="title")
+            name = title_tag.text.strip() if title_tag else "Nom inconnu"
 
-    # --- 3. Affichage ---
-    print("Premier jeu affiché :")
-    print("Nom :", name)
-    print("Prix :", price)
-    print("URL :", url_game)
+            # Prix
+            price_tag = r.find("div", class_="col search_price")
+            if price_tag:
+                price_text = price_tag.text.strip()
+                # Nettoyage du texte (prix normal ou réduit)
+                price = price_text.split("\n")[0].strip()
+                if not price:
+                    price = "Gratuit ou non disponible"
+            else:
+                price = "Prix non disponible"
 
-else:
-    print("Aucun jeu trouvé dans 'top_sellers'.")
+            # URL du jeu
+            url_game = r.get("href", "URL non disponible")
+
+            # Yield un dictionnaire pour Scrapy (ou pour export CSV)
+            yield {
+                "name": name,
+                "price": price,
+                "url": url_game
+            }
+
+        # Pagination (si tu veux scrapper plusieurs pages)
+        next_page = soup.find("a", class_="pagebtn", text=">")
+        if next_page:
+            next_url = next_page.get("href")
+            if next_url:
+                yield scrapy.Request(url=next_url, callback=self.parse)
