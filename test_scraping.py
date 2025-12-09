@@ -1,6 +1,7 @@
 import scrapy
 import requests
 from bs4 import BeautifulSoup
+from scrapy.crawler import CrawlerProcess
 
 class SteamGamesSpider(scrapy.Spider):
     name = "steam_games"
@@ -56,3 +57,13 @@ class SteamGamesSpider(scrapy.Spider):
             next_url = next_page.get("href")
             if next_url:
                 yield scrapy.Request(url=next_url, callback=self.parse)
+
+
+# Exécution du spider
+if __name__ == "__main__":
+    process = CrawlerProcess({
+        "USER_AGENT": "Mozilla/5.0",
+        "ROBOTSTXT_OBEY": False,
+    })
+    process.crawl(SteamGamesSpider)
+    process.start()
