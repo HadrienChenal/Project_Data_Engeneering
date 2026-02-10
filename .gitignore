@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+
+# Scrapy
+*.log
+
+# Data (generated files)
+*.csv
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
