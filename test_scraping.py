@@ -82,7 +82,7 @@ if __name__ == "__main__":
         "USER_AGENT": "Mozilla/5.0",
         "ROBOTSTXT_OBEY": False,
         "FEED_FORMAT": "csv",
-        "FEED_URI": "C:/Users/chena/Python/E4/Data_Engineering/Projet/steam_data_limited.csv",
+        "FEED_URI": "steam_data_limited.csv",
 
     })
     process.crawl(SteamGamesSpider)
