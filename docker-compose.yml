@@ -1,0 +1,33 @@
+services:
+  mongo:
+    image: mongo:6
+    container_name: steam_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile.scraper
+    container_name: steam_scraper
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: steam_dashboard
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:

@@ -1,12 +1,13 @@
 import pymongo
 from itemadapter import ItemAdapter
 from datetime import datetime
-
+import os
 
 class SteamScraperPipeline:
 
     def open_spider(self, spider):
-        self.client = pymongo.MongoClient("mongodb://localhost:27017/")
+        mongo_uri = os.getenv("MONGO_URI")
+        self.client = pymongo.MongoClient(mongo_uri)
         self.db = self.client["steam_db"]
         self.collection = self.db["games"]
 

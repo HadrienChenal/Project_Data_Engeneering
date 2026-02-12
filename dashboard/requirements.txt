@@ -1,3 +1,6 @@
 streamlit
-pymongo
 pandas
+pymongo
+scrapy
+beautifulsoup4
+requests
