@@ -7,7 +7,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🎮 Steam – Top Sellers")
+st.title("Steam Top Sellers")
 
 data = get_games()
 
