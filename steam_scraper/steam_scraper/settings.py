@@ -88,3 +88,4 @@ FEED_EXPORT_ENCODING = "utf-8"
 ITEM_PIPELINES = {
     "steam_scraper.pipelines.SteamScraperPipeline": 300,
 }
+LOG_LEVEL = "ERROR"

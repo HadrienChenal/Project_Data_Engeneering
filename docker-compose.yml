@@ -1,6 +1,8 @@
 services:
   mongo:
     image: mongo:6
+    command: ["mongod", "--quiet", "--logpath", "/dev/null"]
+
     container_name: steam_mongo
     ports:
       - "27017:27017"
