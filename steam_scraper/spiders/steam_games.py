@@ -7,7 +7,7 @@ class SteamGamesSpider(scrapy.Spider):
     name = "steam_games"
     allowed_domains = ["store.steampowered.com"]
 
-    MAX_GAMES = 20
+    MAX_GAMES = 50
     count = 0
 
     def start_requests(self):
