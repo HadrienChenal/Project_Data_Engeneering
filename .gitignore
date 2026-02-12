@@ -11,9 +11,6 @@ __pycache__/
 # Data (generated files)
 *.csv
 
-# Environment variables
-.env
-
 # OS files
 .DS_Store
 Thumbs.db
