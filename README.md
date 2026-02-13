@@ -6,6 +6,34 @@ Ce projet a été réalisé dans le cadre de l’unité Data Engineering. Le pri
 
 Dans notre cas, nous avons choisi de scraper des données issues du site Steam, de stocker ces données dans une base MongoDB et Les afficher via une application web développée avec Streamlit
 
+## Structure du projet
+
+L’organisation du projet est la suivante :
+
+```bash
+PROJECT_DATA_ENGINEERING/
+│
+├── dashboard/               # Application web Streamlit
+│   ├── app.py               # Interface principale
+│   ├── db.py                # Connexion MongoDB
+│   └── requirements.txt     # Dépendances Python
+│
+├── steam_scraper/           # Projet Scrapy
+│   ├── spiders/             # Spiders de scraping
+│   │   └── steam_games.py
+│   │
+│   ├── items.py             # Structure des données
+│   ├── pipelines.py         # Envoi vers MongoDB
+│   ├── settings.py          # Configuration Scrapy
+│
+├── docker-compose.yml       # Orchestration des services
+├── Dockerfile.scraper       # Image Docker Scraper
+├── Dockerfile.web           # Image Docker Web
+├── scrapy.cfg               # Configuration Scrapy
+└── README.md
+```
+
+
 ## Scraping des données
 
 Nous utilisons Scrapy pour :
@@ -64,20 +92,25 @@ Docker
 Docker Compose
 
 Étapes d’exécution
-git clone <url_du_repository>
-cd <nom_du_projet>
+```bash
+git clone https://github.com/HadrienChenal/Project_Data_Engeneering.git
+cd Project_Data_Engeneering
 docker compose up --build
-
+```
 
 Une fois les containers lancés, l’application est accessible à l’adresse :
 
 http://localhost:8501
 
-Pour  acceder a notre projet il faut attendre que le terminal affiche tout ceci : steam_dashboard  |   Local URL: http://localhost:8501         
+Pour  acceder a notre projet il faut attendre que le terminal affiche tout ceci : 
+
+```bash
+steam_dashboard  |   Local URL: http://localhost:8501         
 steam_dashboard  |   Network URL: http://172.18.0.4:8501      
 steam_dashboard  |   External URL: http://90.79.144.99:8501   
 steam_dashboard  |                                      
 steam_scraper exited with code 0
+```
 
 # Choix techniques
 
@@ -91,29 +124,3 @@ Streamlit pour la visualisation interactive
 
 Docker & Docker Compose pour la gestion des services
 
-## 📂 Structure du projet
-
-L’organisation du projet est la suivante :
-
-```bash
-PROJECT_DATA_ENGINEERING/
-│
-├── dashboard/               # Application web Streamlit
-│   ├── app.py               # Interface principale
-│   ├── db.py                # Connexion MongoDB
-│   └── requirements.txt     # Dépendances Python
-│
-├── steam_scraper/           # Projet Scrapy
-│   ├── spiders/             # Spiders de scraping
-│   │   └── steam_games.py
-│   │
-│   ├── items.py             # Structure des données
-│   ├── pipelines.py         # Envoi vers MongoDB
-│   ├── settings.py          # Configuration Scrapy
-│
-├── docker-compose.yml       # Orchestration des services
-├── Dockerfile.scraper       # Image Docker Scraper
-├── Dockerfile.web           # Image Docker Web
-├── scrapy.cfg               # Configuration Scrapy
-└── README.md
-```
