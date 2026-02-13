@@ -91,3 +91,29 @@ Streamlit pour la visualisation interactive
 
 Docker & Docker Compose pour la gestion des services
 
+## 📂 Structure du projet
+
+L’organisation du projet est la suivante :
+
+```bash
+PROJECT_DATA_ENGINEERING/
+│
+├── dashboard/               # Application web Streamlit
+│   ├── app.py               # Interface principale
+│   ├── db.py                # Connexion MongoDB
+│   └── requirements.txt     # Dépendances Python
+│
+├── steam_scraper/           # Projet Scrapy
+│   ├── spiders/             # Spiders de scraping
+│   │   └── steam_games.py
+│   │
+│   ├── items.py             # Structure des données
+│   ├── pipelines.py         # Envoi vers MongoDB
+│   ├── settings.py          # Configuration Scrapy
+│
+├── docker-compose.yml       # Orchestration des services
+├── Dockerfile.scraper       # Image Docker Scraper
+├── Dockerfile.web           # Image Docker Web
+├── scrapy.cfg               # Configuration Scrapy
+└── README.md
+```
