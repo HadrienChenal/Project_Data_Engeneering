@@ -45,14 +45,15 @@ class SteamGamesSpider(scrapy.Spider):
                 steam_id = url_game.split("/app/")[1].split("/")[0]
 
             # Discount %
-            discount_tag = r.find("div", class_="search_discount")
-            discount_percent = None
+            discount_percent = 0
+            discount_tag = r.find("div", class_="discount_pct")
+
             if discount_tag:
-                discount_percent = (
-                    discount_tag.text.strip()
-                    .replace("-", "")
-                    .replace("%", "")
+                discount_text = discount_tag.text.strip()
+                discount_percent = int(
+                    discount_text.replace("-", "").replace("%", "")
                 )
+
 
             # API enrichment
             api_data = self.fetch_api_data(steam_id) if steam_id else {}
@@ -63,7 +64,7 @@ class SteamGamesSpider(scrapy.Spider):
                 "url": url_game,
                 "steam_id": steam_id,
                 "price": api_data.get("price"),
-                "discount_percent": discount_percent,
+                "discount_percent": api_data.get("discount_percent", discount_percent),
                 "review_score": api_data.get("review_score"),
                 "review_count": api_data.get("review_count"),
                 "release_date": api_data.get("release_date"),
