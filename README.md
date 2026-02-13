@@ -2,7 +2,7 @@
 
 ## Présentation du projet
 
-Ce projet a été réalisé dans le cadre de l’unité Data Engineering. Le principe du projet est de collecter des données depuis un site web en scrapant des donnée, on doit ensuite stocker ces données dans une base de données, puis les exploiter à travers une application web interactive et de pouvoir le faire tourner sur Docker.
+Ce projet a été réalisé dans le cadre de l’unité Data Engineering. Le principe du projet est de collecter des données depuis un site web en scrapant des données, on doit ensuite stocker ces données dans une base de données, puis les exploiter à travers une application web interactive et enfin on doit pouvoir le faire tourner sur Docker.
 
 Dans notre cas, nous avons choisi de scraper des données issues du site Steam, de stocker ces données dans une base MongoDB et Les afficher via une application web développée avec Streamlit
 
