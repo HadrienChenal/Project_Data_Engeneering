@@ -36,23 +36,22 @@ PROJECT_DATA_ENGINEERING/
 
 ## Scraping des données
 
-Nous utilisons Scrapy pour :
+Pour chaque jeu du Top 100 Steam :
 
-Collecter les données des jeux Steam
+Rang, Nom, URL, Steam ID, Prix, Pourcentage de réduction, Score Metacritic, Nombre d’avis, Date de sortie, Genres (tags), Date de scraping
 
-Extraire nom, prix, rating, etc.
+### Fonctionnement
 
-Structurer les données via items.py
-
-Envoyer les données vers MongoDB via pipelines.py
-
-Le scraping est déclenché automatiquement au lancement du container .
-
+Scraping du HTML dynamique via l’endpoint search/results
+Parsing avec BeautifulSoup
+Récupération du Steam ID
+Enrichissement via l’API officielle Steam (appdetails)
+Envoi vers MongoDB via pipeline Scrapy
+Le scraping est automatiquement exécuté au démarrage du conteneur Docker.
 
 ## Base de données
 
 Les données collectées sont stockées dans une base MongoDB.
-
 Nous utilisons MongoDB car il y'a une facilité d’intégration avec Scrapy et que c'est compatible Docker
 
 ## Application Web
@@ -67,7 +66,7 @@ De visualiser les données sous forme de tableaux et de graphiques
 
 D’explorer dynamiquement les informations stockées
 
-nous avons choisi Streamlit pour ca simplicité d'utilisatio et sa rapidité de developpement
+nous avons choisi Streamlit pour ca simplicité d'utilisation et sa rapidité de developpement
 
 ## Architecture Docker
 
@@ -88,8 +87,6 @@ L’orchestration est assurée via un fichier docker-compose.yml, permettant de 
 Prérequis
 
 Docker
-
-Docker Compose
 
 Étapes d’exécution
 ```bash
@@ -124,3 +121,20 @@ Streamlit pour la visualisation interactive
 
 Docker & Docker Compose pour la gestion des services
 
+## Difficultés rencontrées
+
+Lors du développement du projet, plusieurs problématiques liées à la qualité et à l’hétérogénéité des données ont été rencontrées.
+
+Tout d’abord, certaines informations récupérées via l’API Steam ne sont pas systématiquement disponibles pour tous les jeux. Par exemple :
+
+Certains jeux ne possèdent pas de score Metacritic
+
+Certains jeux n’ont pas encore de recommandations
+
+Certains champs comme price_overview n’existent pas pour les jeux gratuits
+
+Certaines dates de sortie peuvent être indiquées comme “Prochainement” ou “À déterminer”
+
+Dans ces cas, l’API retourne soit des champs absents, soit des valeurs vides. Cela se traduit par des valeurs None dans la base MongoDB.
+
+Par ailleurs, les dates de sortie sont parfois renvoyées sous forme de texte localisé (ex : format français abrégé), ce qui peut empêcher leur conversion automatique en format datetime lors de l’analyse avec Pandas. Les valeurs non interprétables sont alors converties en NaT (Not a Time), ce qui explique la présence de valeurs manquantes dans certaines visualisations temporelles.
